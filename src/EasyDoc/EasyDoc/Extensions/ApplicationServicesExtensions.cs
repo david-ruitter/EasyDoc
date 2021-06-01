@@ -9,6 +9,7 @@ namespace EasyDoc.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IHelpService, HelpService>();
+            services.AddScoped<IFileService, FileService>();
             return services;
         }
     }
