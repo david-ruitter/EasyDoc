@@ -9,6 +9,7 @@ namespace EasyDoc.Extensions
     {
         public static IServiceCollection AddCommandHandlers(this IServiceCollection services)
         {
+            services.AddScoped<IRequestHandler<WriteFileCommand, Unit>, FileCommandHandler>();
             return services;
         }
 
