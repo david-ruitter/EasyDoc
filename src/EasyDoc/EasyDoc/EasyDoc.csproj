@@ -12,7 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\EasyDoc.Application\EasyDoc.Application.csproj" />
 	<ProjectReference Include="..\EasyDoc.Domain.Core\EasyDoc.Domain.Core.csproj" />
-	<ProjectReference Include="..\EasyDoc.Infrastructure\EasyDoc.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
