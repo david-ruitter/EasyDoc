@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using EasyDoc.Application.Services;
+using EasyDoc.Application.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EasyDoc.Extensions
 {
@@ -6,7 +8,7 @@ namespace EasyDoc.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-
+            services.AddScoped<IHelpService, HelpService>();
             return services;
         }
     }
