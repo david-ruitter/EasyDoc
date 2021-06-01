@@ -1,4 +1,8 @@
-﻿using System;
+﻿using EasyDoc.Application.Interfaces;
+using EasyDoc.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 
 namespace EasyDoc
 {
@@ -6,7 +10,15 @@ namespace EasyDoc
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var serviceProvider = new ServiceCollection()
+                .AddApplicationServices()
+                .BuildServiceProvider();
+
+            if (args.Contains("--help"))
+            {
+                var _helpService = serviceProvider.GetService<IHelpService>();
+                _helpService.GetHelp();
+            }
         }
     }
 }
