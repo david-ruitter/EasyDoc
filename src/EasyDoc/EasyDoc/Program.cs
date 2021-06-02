@@ -34,6 +34,10 @@ namespace EasyDoc
                         var _helpService = serviceProvider.GetService<IHelpService>();
                         _helpService.GetHelp();
                     }
+                    if (r.Key == "--version" || r.Key == "-v")
+                    {
+                        Console.WriteLine("easydoc version: 1.0.0");
+                    }
                     if (r.Key == "--output" || r.Key == "-o")
                     {
                         var _fileService = serviceProvider.GetService<IFileService>();
