@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace EasyDoc.Application.Services
 {
-    public class FileService : IFileService
+    public class FileOutputService : IFileOutputService
     {
         private readonly IMediatorHandler _bus;
 
-        public FileService(IMediatorHandler bus)
+        public FileOutputService(IMediatorHandler bus)
         {
             _bus = bus;
         }

@@ -40,7 +40,7 @@ namespace EasyDoc
                     }
                     if (r.Key == "--output" || r.Key == "-o")
                     {
-                        var _fileService = serviceProvider.GetService<IFileService>();
+                        var _fileService = serviceProvider.GetService<IFileOutputService>();
                         _fileService.WriteFile();
                     }
                 }

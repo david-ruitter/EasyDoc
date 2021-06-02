@@ -2,7 +2,7 @@
 
 namespace EasyDoc.Application.Interfaces
 {
-    public interface IFileService
+    public interface IFileOutputService
     {
         Task WriteFile();
     }
