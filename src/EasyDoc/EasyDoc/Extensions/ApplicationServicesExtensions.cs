@@ -10,6 +10,7 @@ namespace EasyDoc.Extensions
         {
             services.AddScoped<IHelpService, HelpService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<ICommandService, CommandService>();
             return services;
         }
     }
