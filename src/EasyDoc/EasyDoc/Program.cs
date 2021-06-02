@@ -20,15 +20,26 @@ namespace EasyDoc
                 .AddScoped<IMediatorHandler, MediatorHandler>()
                 .BuildServiceProvider();
 
-            if (args.Contains("--help") || args.Contains("-h"))
+            //args = new string[] { "-h"};
+
+            var _commandService = serviceProvider.GetService<ICommandService>();
+            var result = _commandService.ConvertInputToCommandsAndParams(args);
+
+            if (result != null)
             {
-                var _helpService = serviceProvider.GetService<IHelpService>();
-                _helpService.GetHelp();
-            }
-            if (args.Contains("--output") || args.Contains("-o"))
-            {
-                var _fileService = serviceProvider.GetService<IFileService>();
-                _fileService.WriteFile();
+                foreach (var r in result)
+                {
+                    if (r.Key == "--help" || r.Key == "-h")
+                    {
+                        var _helpService = serviceProvider.GetService<IHelpService>();
+                        _helpService.GetHelp();
+                    }
+                    if (r.Key == "--output" || r.Key == "-o")
+                    {
+                        var _fileService = serviceProvider.GetService<IFileService>();
+                        _fileService.WriteFile();
+                    }
+                }
             }
         }
     }
