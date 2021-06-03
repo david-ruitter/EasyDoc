@@ -53,7 +53,8 @@ namespace EasyDoc.Application.Services
                 {
                     var inputFile = new InputFile();
                     inputFile.Path = filepath;
-  
+
+                    inputFile.Extension = filepath.Substring(filepath.LastIndexOf('.'));
                     byte[] contents = File.ReadAllBytes(filepath);
 
                     var stringBuilder = new StringBuilder();
