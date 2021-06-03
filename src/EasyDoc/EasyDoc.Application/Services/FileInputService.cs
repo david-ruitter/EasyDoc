@@ -1,4 +1,5 @@
-﻿using EasyDoc.Application.Interfaces;
+﻿#nullable enable
+using EasyDoc.Application.Interfaces;
 using EasyDoc.Application.Models;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,10 @@ namespace EasyDoc.Application.Services
         /// </summary>
         /// <param name="filePaths">Paths to Files that need to be documented</param>
         /// <returns></returns>
-        public List<string[]> GetFilePaths(List<string> folderPaths)
+        public List<string[]> GetFilePaths(List<string>? folderPaths)
         {
             var folders = new List<string[]>();
-            if (folderPaths.Count == 0)
+            if (folderPaths == null)
             {
                 folders.Add(Directory.GetFiles(Directory.GetCurrentDirectory()));
             } 
