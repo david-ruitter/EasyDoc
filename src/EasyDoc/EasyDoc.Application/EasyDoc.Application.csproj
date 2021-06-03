@@ -9,8 +9,4 @@
     <ProjectReference Include="..\EasyDoc.Domain\EasyDoc.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

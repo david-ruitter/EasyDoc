@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using MediatR;
+using System.Collections.Generic;
 
 namespace EasyDoc
 {
@@ -29,6 +30,7 @@ namespace EasyDoc
             {
                 foreach (var r in result)
                 {
+                    // Command Behaviour
                     if (r.Key == "--help" || r.Key == "-h")
                     {
                         var _helpService = serviceProvider.GetService<IHelpService>();
@@ -43,6 +45,10 @@ namespace EasyDoc
                         var _fileService = serviceProvider.GetService<IFileOutputService>();
                         _fileService.WriteFile();
                     }
+                    // Basic behaviour
+                    var _fileInputService = serviceProvider.GetService<IFileInputService>();
+                    var folders = _fileInputService.GetFilePaths(new List<string>() { @"C:\Development\AusbildungsnachweiseAutomation" });
+                    var inputFiles = _fileInputService.ReadFiles(folders);
                 }
             }
         }
