@@ -76,7 +76,8 @@ namespace EasyDoc.Application.Services
                 "-h", "--help",
                 "-p", "--path",
                 "-o", "--output",
-                "-f", "--format"
+                "-f", "--format",
+                "-i", "--input" 
             };
             return commands.Contains(command);
         }
