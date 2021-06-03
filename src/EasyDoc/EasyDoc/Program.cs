@@ -35,6 +35,7 @@ namespace EasyDoc
                     {
                         var _helpService = serviceProvider.GetService<IHelpService>();
                         _helpService.GetHelp();
+                        return;
                     }
                     if (r.Key == "--version" || r.Key == "-v")
                     {
@@ -45,10 +46,22 @@ namespace EasyDoc
                         var _fileService = serviceProvider.GetService<IFileOutputService>();
                         _fileService.WriteFile();
                     }
-                    // Basic behaviour
+
                     var _fileInputService = serviceProvider.GetService<IFileInputService>();
-                    var folders = _fileInputService.GetFilePaths(new List<string>() { @"C:\Development\AusbildungsnachweiseAutomation" });
+                    List<string[]> folders;
+                    if (r.Key == "--input" || r.Key == "-i")
+                    {
+                        folders = _fileInputService.GetFilePaths(r.Value);
+                    }
+                    else
+                    {
+                        folders = _fileInputService.GetFilePaths(null);
+                    }
                     var inputFiles = _fileInputService.ReadFiles(folders);
+                    foreach(var inFile in inputFiles)
+                    {
+                        Console.WriteLine(inFile.Content);
+                    }
                 }
             }
         }
