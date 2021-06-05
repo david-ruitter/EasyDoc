@@ -54,6 +54,9 @@ namespace EasyDoc.Application.Services
                     var inputFile = new InputFile();
                     inputFile.Path = filepath;
 
+                    string fileName = filepath.Substring(filepath.LastIndexOf('\\') + 1);
+                    inputFile.Name = fileName.Substring(0, fileName.IndexOf("."));
+                    
                     inputFile.Extension = filepath.Substring(filepath.LastIndexOf('.'));
                     byte[] contents = File.ReadAllBytes(filepath);
 
