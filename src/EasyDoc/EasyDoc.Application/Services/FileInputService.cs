@@ -51,13 +51,15 @@ namespace EasyDoc.Application.Services
             {
                 foreach (var filepath in folder)
                 {
-                    var inputFile = new InputFile();
-                    inputFile.Path = filepath;
+                    string fileName = filepath[(filepath.LastIndexOf('\\') + 1)..];
 
-                    string fileName = filepath.Substring(filepath.LastIndexOf('\\') + 1);
-                    inputFile.Name = fileName.Substring(0, fileName.IndexOf("."));
-                    
-                    inputFile.Extension = filepath.Substring(filepath.LastIndexOf('.'));
+                    var inputFile = new InputFile
+                    {
+                        Path = filepath,
+                        Name = fileName.Substring(0, fileName.IndexOf(".")),
+                        Extension = filepath[filepath.LastIndexOf('.')..]
+                    };
+
                     byte[] contents = File.ReadAllBytes(filepath);
 
                     var stringBuilder = new StringBuilder();
@@ -65,8 +67,8 @@ namespace EasyDoc.Application.Services
                     {
                         stringBuilder.Append((char)c);
                     }
-
                     inputFile.Content = stringBuilder.ToString();
+
                     output.Add(inputFile);
                 }
             }
