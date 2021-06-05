@@ -35,7 +35,13 @@ namespace EasyDoc.Application.Models
             }
 
             Console.Write("[{0}]", placeHolder.ToString());
-            Console.SetCursorPosition(0, Console.CursorTop);
+            if(CurrentStep != Length)
+            {
+                Console.SetCursorPosition(0, Console.CursorTop);
+            } else
+            {
+                Console.WriteLine();
+            }
         }
 
         public bool Update()
