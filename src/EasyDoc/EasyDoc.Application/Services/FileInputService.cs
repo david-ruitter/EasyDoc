@@ -47,17 +47,26 @@ namespace EasyDoc.Application.Services
         {
             Console.WriteLine("Reading Files");
             var output = new List<InputFile>();
+            var progressBar = new ProgressBar(folders.Count);
             foreach (var folder in folders)
             {
+                progressBar.Update();
+                progressBar.ShowProgress();
                 foreach (var filepath in folder)
                 {
                     string fileName = filepath[(filepath.LastIndexOf('\\') + 1)..];
+                    string extension = "";
+                    if (fileName.Contains('.'))
+                    {
+                        fileName = fileName.Substring(0, fileName.IndexOf("."));
+                        extension = filepath[filepath.LastIndexOf('.')..];
+                    }
 
                     var inputFile = new InputFile
                     {
                         Path = filepath,
-                        Name = fileName.Substring(0, fileName.IndexOf(".")),
-                        Extension = filepath[filepath.LastIndexOf('.')..]
+                        Name = fileName,
+                        Extension = extension
                     };
 
                     byte[] contents = File.ReadAllBytes(filepath);
