@@ -21,7 +21,7 @@ namespace EasyDoc
                 .AddScoped<IMediatorHandler, MediatorHandler>()
                 .BuildServiceProvider();
 
-            //args = new string[] { "-h"};
+            // args = new string[] { };
 
             var _commandService = serviceProvider.GetService<ICommandService>();
             var result = _commandService.ConvertInputToCommandsAndParams(args);
@@ -58,9 +58,11 @@ namespace EasyDoc
                         folders = _fileInputService.GetFilePaths(null);
                     }
                     var inputFiles = _fileInputService.ReadFiles(folders);
-                    foreach(var inFile in inputFiles)
+
+                    var _documentationService = serviceProvider.GetService<IDocumentationService>();
+                    foreach (var inFile in inputFiles)
                     {
-                        Console.WriteLine(inFile.Content);
+                        _documentationService.CreateDocumentation(inFile, "json");
                     }
                 }
             }
