@@ -24,7 +24,7 @@ namespace EasyDoc.Application.Services
             _bus = bus;
         }
 
-        public async Task<string> CreateDocumentationAsync(InputFile inputFile, string outputFormat)
+        public async Task<string> CreateDocumentationAsync(InputFile inputFile)
         {
             selectedRule = rules.FirstOrDefault(r => r.FileExtension == inputFile.Extension);
             if (selectedRule == null)
