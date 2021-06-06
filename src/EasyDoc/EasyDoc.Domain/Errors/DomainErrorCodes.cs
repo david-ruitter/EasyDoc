@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EasyDoc.Domain.Errors
+﻿namespace EasyDoc.Domain.Errors
 {
     public static class DomainErrorCodes
     {
+        public const string InvalidFileName = "INVALID_FILE_NAME";
+        public const string InvalidFileContent = "INVALID_FILE_CONTENT";
     }
 }
