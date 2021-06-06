@@ -24,7 +24,7 @@ namespace EasyDoc.Application.Services
             _bus = bus;
         }
 
-        public async Task<string> CreateDocumentationAsync(InputFile inputFile)
+        public async Task<CommentOutput> CreateDocumentationAsync(InputFile inputFile)
         {
             selectedRule = rules.FirstOrDefault(r => r.FileExtension == inputFile.Extension);
             if (selectedRule == null)
@@ -33,13 +33,15 @@ namespace EasyDoc.Application.Services
                 return null;
             }
 
+            CommentOutput documentation = null;
+
             if (inputFile.Extension == ".java")
             {
                 var request = new GetJavaDocumentation(Guid.NewGuid(), inputFile.Name, inputFile.Content);
-                var comments = await _bus.SendReturningCommandAsync(request);
+                documentation = await _bus.SendReturningCommandAsync(request);
             }
 
-            return "";
+            return documentation;
         }
     }
 }
