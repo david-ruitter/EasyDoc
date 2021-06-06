@@ -13,6 +13,7 @@ namespace EasyDoc.Extensions
             services.AddScoped<IFileOutputService, FileOutputService>();
             services.AddScoped<ICommandService, CommandService>();
             services.AddScoped<IDocumentationService, DocumentationService>();
+            services.AddScoped<IFormatService, FormatService>();
             return services;
         }
     }
