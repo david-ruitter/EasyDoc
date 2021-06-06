@@ -18,7 +18,10 @@ namespace EasyDoc.Application.RequestHandlers
                 request.PrintErrors();
                 return null;
             }
-            var commentOutput = new CommentOutput();
+            var commentOutput = new CommentOutput()
+            {
+                Name = request.FileName
+            };
             var content = request.FileContent.ToCharArray();
             bool isComment = false;
             StringBuilder sb = new StringBuilder();
