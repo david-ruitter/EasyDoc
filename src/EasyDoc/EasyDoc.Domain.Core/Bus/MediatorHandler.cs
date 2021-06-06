@@ -18,9 +18,14 @@ namespace EasyDoc.Domain.Core.Bus
             await _mediator.Send(command);
         }
 
-        public async Task SendRequestAsync<TResponse>(Request<TResponse> request)
+        public async Task<TResponse> SendRequestAsync<TResponse>(Request<TResponse> request)
         {
-            await _mediator.Send(request);
+            return await _mediator.Send(request);
+        }
+
+        public async Task<TResponse> SendReturningCommandAsync<TResponse>(ReturningCommand<TResponse> command)
+        {
+            return await _mediator.Send(command);
         }
     }
 }
