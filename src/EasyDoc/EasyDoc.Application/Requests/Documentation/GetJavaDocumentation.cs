@@ -1,10 +1,13 @@
-﻿namespace EasyDoc.Application.Requests.Documentation
+﻿using System;
+
+namespace EasyDoc.Application.Requests.Documentation
 {
     public class GetJavaDocumentation : DocumentationRequest
     {
         public GetJavaDocumentation(
+            Guid aggregateId,
             string fileName,
-            string fileContent) : base(fileName, fileContent)
+            string fileContent) : base(aggregateId, fileName, fileContent)
         { 
         }
     }
