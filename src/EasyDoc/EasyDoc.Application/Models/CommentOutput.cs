@@ -11,6 +11,7 @@ namespace EasyDoc.Application.Models
             MethodComments = new Dictionary<string, string>();
         }
 
+        public string Name { get; set; }
         public string TopLevelComment { get; set; }
         public string Author { get; set; }
         public string Version { get; set; }
