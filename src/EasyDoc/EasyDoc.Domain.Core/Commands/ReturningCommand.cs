@@ -13,5 +13,13 @@ namespace EasyDoc.Domain.Core.Commands
         }
 
         public abstract bool IsValid();
+
+        public void PrintErrors()
+        {
+            foreach (var error in ValidationResult.Errors)
+            {
+                Console.WriteLine(error);
+            }
+        }
     }
 }
