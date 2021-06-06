@@ -5,6 +5,6 @@ namespace EasyDoc.Application.Interfaces
 {
     public interface IDocumentationService
     {
-        Task<string> CreateDocumentationAsync(InputFile inputFile, string outputFormat);
+        Task<string> CreateDocumentationAsync(InputFile inputFile);
     }
 }
