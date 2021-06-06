@@ -1,25 +1,30 @@
 ﻿using EasyDoc.Application.Interfaces;
 using EasyDoc.Application.Models;
+using EasyDoc.Application.Requests.Documentation;
 using EasyDoc.Application.Rules;
+using EasyDoc.Domain.Core.Bus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace EasyDoc.Application.Services
 {
     public class DocumentationService : IDocumentationService
     {
+        private readonly IMediatorHandler _bus;
         private Rules.Rules selectedRule;
-        private string[] knownExportFormats = { "json" };
-
-        private List<Rules.Rules> rules = new List<Rules.Rules>()
+        private readonly List<Rules.Rules> rules = new List<Rules.Rules>()
         {
             new JavaRules()
         };
 
-        public string CreateDocumentation(InputFile inputFile, string outputFormat)
+        public DocumentationService(IMediatorHandler bus)
+        {
+            _bus = bus;
+        }
+
+        public async Task<string> CreateDocumentationAsync(InputFile inputFile, string outputFormat)
         {
             selectedRule = rules.FirstOrDefault(r => r.FileExtension == inputFile.Extension);
             if (selectedRule == null)
@@ -30,101 +35,11 @@ namespace EasyDoc.Application.Services
 
             if (inputFile.Extension == ".java")
             {
-                string content = DocumentJava(inputFile, "xml");
-                if (content != null)
-                {
-                    Console.WriteLine(content);
-                }
+                var request = new GetJavaDocumentation(Guid.NewGuid(), inputFile.Name, inputFile.Content);
+                var comments = await _bus.SendReturningCommandAsync(request);
             }
 
             return "";
-        }
-
-        private string DocumentJava(InputFile inputFile, string exportFormat)
-        {
-            if (!knownExportFormats.Contains(exportFormat))
-            {
-                Console.WriteLine("The export format {0} is not known. Please choose one of these valid formats", exportFormat);
-                foreach(var format in knownExportFormats)
-                {
-                    Console.Write("[{0}] ", format);
-                }
-                return null;
-            }
-
-            var commentOutput = new CommentOutput();
-            var content = inputFile.Content.ToCharArray();
-            bool isComment = false;
-            StringBuilder sb = new StringBuilder();
-
-            int commentCounter = 0;
-            for (int i = 0; i<content.Length; i++)
-            {
-                try
-                {
-                    if (isComment)
-                    {
-                        if (content[i] == '*' && content[i + 1] == '/')
-                        {
-                            isComment = false;
-                            i += 2;
-
-                            if (commentCounter == 1)
-                            {
-                                commentOutput.TopLevelComment = sb.ToString().Trim();
-                                continue;
-                            }
-
-                            // Check what kind of comment was used
-                            StringBuilder typeStringBuilder = new StringBuilder();
-                            int j = i;
-                           
-                            while(content[j] != '{' && content[j] != ';')
-                            {
-                                typeStringBuilder.Append(content[j]);
-                                j++;
-                            }
-                            string lineOutput = typeStringBuilder.ToString().Trim();
-                            // Must be either Constructor or Method in java
-                            if (lineOutput.Contains('(') || lineOutput.Contains(')'))
-                            {
-                                // Constructor
-                                if (lineOutput.Contains(inputFile.Name))
-                                {
-                                    commentOutput.ConstructorComments.Add(lineOutput, sb.ToString().Trim());
-                                }
-                                // Method
-                                else
-                                {
-                                    commentOutput.MethodComments.Add(lineOutput, sb.ToString().Trim());
-                                }
-                            } 
-                            else
-                            {
-                                // Property
-                                commentOutput.PropertyComments.Add(lineOutput, sb.ToString().Trim());
-                            }
-
-                            continue;
-                        }
-                        sb.Append(content[i]);
-                    }
-
-                    if (content[i] == '/' && content[i + 1] == '*' && content[i + 2] == '*' && !isComment)
-                    {
-                        sb = new StringBuilder();
-                        i += 2;
-                        isComment = true;
-                        commentCounter++;
-                    }
-
-                }
-                catch(IndexOutOfRangeException e)
-                {
-
-                }
-            }
-            return JsonSerializer.Serialize(commentOutput);
         }
     }
 }

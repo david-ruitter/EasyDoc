@@ -1,9 +1,10 @@
 ﻿using EasyDoc.Application.Models;
+using System.Threading.Tasks;
 
 namespace EasyDoc.Application.Interfaces
 {
     public interface IDocumentationService
     {
-        string CreateDocumentation(InputFile inputFile, string outputFormat);
+        Task<string> CreateDocumentationAsync(InputFile inputFile, string outputFormat);
     }
 }
