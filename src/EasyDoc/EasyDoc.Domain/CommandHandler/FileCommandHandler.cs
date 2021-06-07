@@ -1,9 +1,7 @@
 ﻿using EasyDoc.Domain.Commands.Files;
 using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,7 +15,17 @@ namespace EasyDoc.Domain.CommandHandler
 
         public Task<Unit> Handle(WriteFileCommand request, CancellationToken cancellationToken)
         {
-            Console.WriteLine("WriteFileCommand was triggered! Filename = " + request.FileName);
+            if (!request.IsValid())
+            {
+                request.PrintErrors();
+                return Unit.Task;
+            }
+
+            string outputPath = request.FilePath ?? Directory.GetCurrentDirectory();
+            outputPath += "documentation.txt";
+
+            File.WriteAllText(outputPath, request.FileContent);
+
             return Unit.Task;
         }
     }
