@@ -1,10 +1,6 @@
 ﻿using EasyDoc.Domain.Commands.Files;
+using EasyDoc.Domain.Errors;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EasyDoc.Domain.CommandValidation.Files
 {
@@ -12,12 +8,24 @@ namespace EasyDoc.Domain.CommandValidation.Files
     {
         public WriteFileCommandValidation()
         {
-
+            AddRuleForFileName();
+            AddRuleForFileContent();
         }
 
         protected void AddRuleForFileName()
         {
-            
+            RuleFor(cmd => cmd.FileName)
+                .NotEmpty()
+                .WithErrorCode(DomainErrorCodes.InvalidFileName)
+                .WithMessage("Filename may not be empty");
+        }
+
+        protected void AddRuleForFileContent()
+        {
+            RuleFor(cmd => cmd.FileContent)
+                .NotEmpty()
+                .WithErrorCode(DomainErrorCodes.InvalidFileContent)
+                .WithMessage("Filecontent may not be empty");
         }
     }
 }
