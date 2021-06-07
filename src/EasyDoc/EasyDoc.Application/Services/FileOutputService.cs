@@ -2,6 +2,7 @@
 using EasyDoc.Domain.Commands.Files;
 using EasyDoc.Domain.Core.Bus;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EasyDoc.Application.Services
@@ -15,10 +16,15 @@ namespace EasyDoc.Application.Services
             _bus = bus;
         }
 
-        public async Task WriteFile()
+        public async Task WriteFile(List<string> documentations, string outputPath)
         {
-            await _bus.SendCommandAsync(new WriteFileCommand(Guid.NewGuid(), "Test.txt", null));
-            throw new NotImplementedException();
+            foreach(var doc in documentations)
+            {
+                if (doc != null)
+                {
+                    await _bus.SendCommandAsync(new WriteFileCommand(Guid.NewGuid(), doc, "Test.txt", outputPath));
+                }
+            }
         }
     }
 }
