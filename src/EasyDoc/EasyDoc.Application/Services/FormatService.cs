@@ -31,7 +31,7 @@ namespace EasyDoc.Application.Services
 
             if (format == formats[0])
             {
-                output = JsonSerializer.Serialize(content);
+                output = JsonSerializer.Serialize(content, new JsonSerializerOptions() { WriteIndented = true });
             }
 
             return output;
