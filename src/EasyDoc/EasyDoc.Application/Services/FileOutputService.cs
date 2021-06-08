@@ -26,5 +26,10 @@ namespace EasyDoc.Application.Services
                 }
             }
         }
+
+        public async Task WriteFile(string documentation, string outputPath)
+        {
+            await _bus.SendCommandAsync(new WriteFileCommand(Guid.NewGuid(), documentation, "Test.txt", outputPath));
+        }
     }
 }
