@@ -34,20 +34,21 @@ namespace EasyDoc
 
             if (result != null)
             {
+                // Get Help
+                if (result.ContainsKey("--help") || result.ContainsKey("-h"))
+                {
+                    var _helpService = serviceProvider.GetService<IHelpService>();
+                    _helpService.GetHelp();
+                    return;
+                }
+                if (result.ContainsKey("--version") || result.ContainsKey("-v"))
+                {
+                    Console.WriteLine("easydoc version: 1.0.0");
+                    return;
+                }
                 foreach (var r in result)
                 {
                     // Command Behaviour
-                    if (r.Key == "--help" || r.Key == "-h")
-                    {
-                        var _helpService = serviceProvider.GetService<IHelpService>();
-                        _helpService.GetHelp();
-                        return;
-                    }
-                    if (r.Key == "--version" || r.Key == "-v")
-                    {
-                        Console.WriteLine("easydoc version: 1.0.0");
-                        return;
-                    }
                     if (r.Key == "--output" || r.Key == "-o")
                     {
                         outputPath = r.Value[0];
