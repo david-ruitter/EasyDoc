@@ -16,20 +16,20 @@ namespace EasyDoc.Application.Services
             _bus = bus;
         }
 
-        public async Task WriteFile(List<string> documentations, string outputPath)
+        public async Task WriteFile(List<string> documentations, string outputPath, string outfile = "documentation.txt")
         {
             foreach(var doc in documentations)
             {
                 if (doc != null)
                 {
-                    await _bus.SendCommandAsync(new WriteFileCommand(Guid.NewGuid(), doc, "Test.txt", outputPath));
+                    await _bus.SendCommandAsync(new WriteFileCommand(Guid.NewGuid(), doc, outfile, outputPath));
                 }
             }
         }
 
-        public async Task WriteFile(string documentation, string outputPath)
+        public async Task WriteFile(string documentation, string outputPath, string outfile = "documentation.txt")
         {
-            await _bus.SendCommandAsync(new WriteFileCommand(Guid.NewGuid(), documentation, "Test.txt", outputPath));
+            await _bus.SendCommandAsync(new WriteFileCommand(Guid.NewGuid(), documentation, outfile, outputPath));
         }
     }
 }
