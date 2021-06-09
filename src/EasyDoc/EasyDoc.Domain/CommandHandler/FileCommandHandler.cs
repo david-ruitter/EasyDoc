@@ -22,7 +22,7 @@ namespace EasyDoc.Domain.CommandHandler
             }
 
             string outputPath = request.FilePath ?? Directory.GetCurrentDirectory();
-            outputPath += "documentation.txt";
+            outputPath += request.FileName;
 
             File.WriteAllText(outputPath, request.FileContent);
 
