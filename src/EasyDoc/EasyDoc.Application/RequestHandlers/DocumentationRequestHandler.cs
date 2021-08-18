@@ -28,7 +28,8 @@ namespace EasyDoc.Application.RequestHandlers
             };
             char[] fileChars = request.FileContent.ToCharArray();
             bool isComment = false;
-            var sb = new StringBuilder();
+            var commentStringBuilder = new StringBuilder();
+            var signatureStringBuilder = new StringBuilder();
 
             int commentCounter = 0;
             for (int i = 0; i < fileChars.Length; i++)
@@ -42,12 +43,12 @@ namespace EasyDoc.Application.RequestHandlers
 
                         if (commentCounter == 1)
                         {
-                            commentOutput.TopLevelComment = sb.ToString().Trim();
+                            commentOutput.TopLevelComment = commentStringBuilder.ToString().Trim();
                             continue;
                         }
 
                         // Check what kind of comment was used
-                        var signatureStringBuilder = new StringBuilder();
+                        signatureStringBuilder = signatureStringBuilder.Clear();
                         int j = i;
 
                         while (fileChars[j] != '{' && fileChars[j] != ';')
@@ -62,28 +63,28 @@ namespace EasyDoc.Application.RequestHandlers
                             // Constructor
                             if (signature.Contains(request.FileName))
                             {
-                                commentOutput.ConstructorComments = commentOutput.ConstructorComments.Append(new Comment(signature, sb.ToString().Trim()));
+                                commentOutput.ConstructorComments = commentOutput.ConstructorComments.Append(new Comment(signature, commentStringBuilder.ToString().Trim()));
                             }
                             // Method
                             else
                             {
-                                commentOutput.MethodComments = commentOutput.MethodComments.Append(new Comment(signature, sb.ToString().Trim()));
+                                commentOutput.MethodComments = commentOutput.MethodComments.Append(new Comment(signature, commentStringBuilder.ToString().Trim()));
                             }
                         }
                         else
                         {
                             // Property
-                            commentOutput.PropertyComments = commentOutput.PropertyComments.Append(new Comment(signature, sb.ToString().Trim()));
+                            commentOutput.PropertyComments = commentOutput.PropertyComments.Append(new Comment(signature, commentStringBuilder.ToString().Trim()));
                         }
 
                         continue;
                     }
-                    sb.Append(fileChars[i]);
+                    commentStringBuilder.Append(fileChars[i]);
                 }
 
                 if (documentationRule.IsStartOfComment(fileChars, i, isComment))
                 {
-                    sb = new StringBuilder();
+                    commentStringBuilder = commentStringBuilder.Clear();
                     i += 2;
                     isComment = true;
                     commentCounter++;
