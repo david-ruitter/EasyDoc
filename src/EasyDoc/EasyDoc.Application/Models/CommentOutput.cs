@@ -6,9 +6,9 @@ namespace EasyDoc.Application.Models
     {
         public CommentOutput()
         {
-            PropertyComments = new Dictionary<string, string>();
-            ConstructorComments = new Dictionary<string, string>();
-            MethodComments = new Dictionary<string, string>();
+            PropertyComments = new List<Comment>();
+            ConstructorComments = new List<Comment>();
+            MethodComments = new List<Comment>();
         }
 
         public string Name { get; set; }
@@ -17,8 +17,8 @@ namespace EasyDoc.Application.Models
         public string Version { get; set; }
         public List<string> Sees { get; set; }
 
-        public Dictionary<string, string> PropertyComments { get; set; }
-        public Dictionary<string, string> ConstructorComments { get; set; }
-        public Dictionary<string, string> MethodComments { get; set; }
+        public IEnumerable<Comment> PropertyComments { get; set; }
+        public IEnumerable<Comment> ConstructorComments { get; set; }
+        public IEnumerable<Comment> MethodComments { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using EasyDoc.Application.Requests.Documentation;
 using MediatR;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,18 +23,18 @@ namespace EasyDoc.Application.RequestHandlers
             {
                 Name = request.FileName
             };
-            var content = request.FileContent.ToCharArray();
+            char[] fileChars = request.FileContent.ToCharArray();
             bool isComment = false;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             int commentCounter = 0;
-            for (int i = 0; i < content.Length; i++)
+            for (int i = 0; i < fileChars.Length; i++)
             {
                 try
                 {
                     if (isComment)
                     {
-                        if (content[i] == '*' && content[i + 1] == '/')
+                        if (fileChars[i] == '*' && fileChars[i + 1] == '/')
                         {
                             isComment = false;
                             i += 2;
@@ -45,12 +46,12 @@ namespace EasyDoc.Application.RequestHandlers
                             }
 
                             // Check what kind of comment was used
-                            StringBuilder typeStringBuilder = new StringBuilder();
+                            var typeStringBuilder = new StringBuilder();
                             int j = i;
 
-                            while (content[j] != '{' && content[j] != ';')
+                            while (fileChars[j] != '{' && fileChars[j] != ';')
                             {
-                                typeStringBuilder.Append(content[j]);
+                                typeStringBuilder.Append(fileChars[j]);
                                 j++;
                             }
                             string lineOutput = typeStringBuilder.ToString().Trim();
@@ -60,26 +61,26 @@ namespace EasyDoc.Application.RequestHandlers
                                 // Constructor
                                 if (lineOutput.Contains(request.FileName))
                                 {
-                                    commentOutput.ConstructorComments.Add(lineOutput, sb.ToString().Trim());
+                                    commentOutput.ConstructorComments = commentOutput.ConstructorComments.Append(new Comment(lineOutput, sb.ToString().Trim()));
                                 }
                                 // Method
                                 else
                                 {
-                                    commentOutput.MethodComments.Add(lineOutput, sb.ToString().Trim());
+                                    commentOutput.MethodComments = commentOutput.MethodComments.Append(new Comment(lineOutput, sb.ToString().Trim()));
                                 }
                             }
                             else
                             {
                                 // Property
-                                commentOutput.PropertyComments.Add(lineOutput, sb.ToString().Trim());
+                                commentOutput.PropertyComments = commentOutput.PropertyComments.Append(new Comment(lineOutput, sb.ToString().Trim()));
                             }
 
                             continue;
                         }
-                        sb.Append(content[i]);
+                        sb.Append(fileChars[i]);
                     }
 
-                    if (content[i] == '/' && content[i + 1] == '*' && content[i + 2] == '*' && !isComment)
+                    if (fileChars[i] == '/' && fileChars[i + 1] == '*' && fileChars[i + 2] == '*' && !isComment)
                     {
                         sb = new StringBuilder();
                         i += 2;
@@ -88,10 +89,7 @@ namespace EasyDoc.Application.RequestHandlers
                     }
 
                 }
-                catch (IndexOutOfRangeException e)
-                {
-
-                }
+                catch (IndexOutOfRangeException e) { }
             }
             return commentOutput;
         }
