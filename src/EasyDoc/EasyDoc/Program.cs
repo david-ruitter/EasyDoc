@@ -74,12 +74,8 @@ namespace EasyDoc
 
                 // Format Files
                 var _formatService = serviceProvider.GetService<IFormatService>();
-                var formattedDocumentations = new List<string>();
-                foreach (var doc in documentations)
-                {
-                    formattedDocumentations.Add(_formatService.FormatAs(doc, defaultFormat));
-                }
 
+                string formattedDocumentations = _formatService.FormatAs(documentations, defaultFormat);
                 var _fileOutputService = serviceProvider.GetService<IFileOutputService>();
                 await _fileOutputService.WriteFile(formattedDocumentations, outputPath);
                 
