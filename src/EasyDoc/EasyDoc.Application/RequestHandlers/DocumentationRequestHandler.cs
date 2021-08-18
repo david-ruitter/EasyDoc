@@ -1,5 +1,6 @@
 ﻿using EasyDoc.Application.Models;
 using EasyDoc.Application.Requests.Documentation;
+using EasyDoc.Application.Rules;
 using MediatR;
 using System;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace EasyDoc.Application.RequestHandlers
                 request.PrintErrors();
                 return null;
             }
+            var documentationRule = new JavaDocumentationRule();
+
             var commentOutput = new CommentOutput()
             {
                 Name = request.FileName
@@ -30,66 +33,61 @@ namespace EasyDoc.Application.RequestHandlers
             int commentCounter = 0;
             for (int i = 0; i < fileChars.Length; i++)
             {
-                try
+                if (isComment)
                 {
-                    if (isComment)
+                    if (documentationRule.IsEndOfComment(fileChars, i))
                     {
-                        if (fileChars[i] == '*' && fileChars[i + 1] == '/')
+                        isComment = false;
+                        i += 2;
+
+                        if (commentCounter == 1)
                         {
-                            isComment = false;
-                            i += 2;
-
-                            if (commentCounter == 1)
-                            {
-                                commentOutput.TopLevelComment = sb.ToString().Trim();
-                                continue;
-                            }
-
-                            // Check what kind of comment was used
-                            var typeStringBuilder = new StringBuilder();
-                            int j = i;
-
-                            while (fileChars[j] != '{' && fileChars[j] != ';')
-                            {
-                                typeStringBuilder.Append(fileChars[j]);
-                                j++;
-                            }
-                            string lineOutput = typeStringBuilder.ToString().Trim();
-                            // Must be either Constructor or Method in java
-                            if (lineOutput.Contains('(') || lineOutput.Contains(')'))
-                            {
-                                // Constructor
-                                if (lineOutput.Contains(request.FileName))
-                                {
-                                    commentOutput.ConstructorComments = commentOutput.ConstructorComments.Append(new Comment(lineOutput, sb.ToString().Trim()));
-                                }
-                                // Method
-                                else
-                                {
-                                    commentOutput.MethodComments = commentOutput.MethodComments.Append(new Comment(lineOutput, sb.ToString().Trim()));
-                                }
-                            }
-                            else
-                            {
-                                // Property
-                                commentOutput.PropertyComments = commentOutput.PropertyComments.Append(new Comment(lineOutput, sb.ToString().Trim()));
-                            }
-
+                            commentOutput.TopLevelComment = sb.ToString().Trim();
                             continue;
                         }
-                        sb.Append(fileChars[i]);
-                    }
 
-                    if (fileChars[i] == '/' && fileChars[i + 1] == '*' && fileChars[i + 2] == '*' && !isComment)
-                    {
-                        sb = new StringBuilder();
-                        i += 2;
-                        isComment = true;
-                        commentCounter++;
-                    }
+                        // Check what kind of comment was used
+                        var signatureStringBuilder = new StringBuilder();
+                        int j = i;
 
+                        while (fileChars[j] != '{' && fileChars[j] != ';')
+                        {
+                            signatureStringBuilder.Append(fileChars[j]);
+                            j++;
+                        }
+                        string signature = signatureStringBuilder.ToString().Trim();
+                        // Must be either Constructor or Method in java
+                        if (signature.Contains('(') || signature.Contains(')'))
+                        {
+                            // Constructor
+                            if (signature.Contains(request.FileName))
+                            {
+                                commentOutput.ConstructorComments = commentOutput.ConstructorComments.Append(new Comment(signature, sb.ToString().Trim()));
+                            }
+                            // Method
+                            else
+                            {
+                                commentOutput.MethodComments = commentOutput.MethodComments.Append(new Comment(signature, sb.ToString().Trim()));
+                            }
+                        }
+                        else
+                        {
+                            // Property
+                            commentOutput.PropertyComments = commentOutput.PropertyComments.Append(new Comment(signature, sb.ToString().Trim()));
+                        }
+
+                        continue;
+                    }
+                    sb.Append(fileChars[i]);
                 }
-                catch (IndexOutOfRangeException e) { }
+
+                if (documentationRule.IsStartOfComment(fileChars, i, isComment))
+                {
+                    sb = new StringBuilder();
+                    i += 2;
+                    isComment = true;
+                    commentCounter++;
+                }
             }
             return commentOutput;
         }

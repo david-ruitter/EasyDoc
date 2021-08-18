@@ -13,10 +13,10 @@ namespace EasyDoc.Application.Services
     public class DocumentationService : IDocumentationService
     {
         private readonly IMediatorHandler _bus;
-        private Rules.Rules selectedRule;
-        private readonly List<Rules.Rules> rules = new List<Rules.Rules>()
+        private Rules.DocumentationRule selectedRule;
+        private readonly List<Rules.DocumentationRule> rules = new List<Rules.DocumentationRule>()
         {
-            new JavaRules()
+            new JavaDocumentationRule()
         };
 
         public DocumentationService(IMediatorHandler bus)
