@@ -16,7 +16,7 @@ namespace EasyDoc.Application.Services
             _bus = bus;
         }
 
-        public async Task WriteFile(List<string> documentations, string outputPath, string outfile = "documentation.txt")
+        public async Task WriteFile(List<string> documentations, string outputPath, string outfile)
         {
             foreach(var doc in documentations)
             {
@@ -27,7 +27,7 @@ namespace EasyDoc.Application.Services
             }
         }
 
-        public async Task WriteFile(string documentation, string outputPath, string outfile = "documentation.txt")
+        public async Task WriteFile(string documentation, string outputPath, string outfile)
         {
             await _bus.SendCommandAsync(new WriteFileCommand(Guid.NewGuid(), documentation, outfile, outputPath));
         }
