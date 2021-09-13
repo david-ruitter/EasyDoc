@@ -61,13 +61,6 @@ namespace EasyDoc.Application.Services
                         extension = filepath[filepath.LastIndexOf('.')..];
                     }
 
-                    var inputFile = new InputFile
-                    {
-                        Path = filepath,
-                        Name = fileName,
-                        Extension = extension
-                    };
-
                     byte[] contents = File.ReadAllBytes(filepath);
 
                     var stringBuilder = new StringBuilder();
@@ -75,7 +68,11 @@ namespace EasyDoc.Application.Services
                     {
                         stringBuilder.Append((char)c);
                     }
-                    inputFile.Content = stringBuilder.ToString();
+                    var inputFile = new InputFile(
+                        filepath,
+                        fileName,
+                        extension,
+                        stringBuilder.ToString());
 
                     output.Add(inputFile);
                 }
