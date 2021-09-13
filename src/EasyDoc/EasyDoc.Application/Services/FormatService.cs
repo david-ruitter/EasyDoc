@@ -11,7 +11,7 @@ namespace EasyDoc.Application.Services
     {
         private readonly string[] formats = { "json" };
 
-        public string FormatAs(CommentOutput content, string format)
+        public string? FormatAs(CommentOutput content, string format)
         {
             if (!FormatIsAvailable(format))
             {
@@ -34,7 +34,7 @@ namespace EasyDoc.Application.Services
             return output;
         }
 
-        public string FormatAs(List<CommentOutput> content, string format)
+        public string? FormatAs(List<CommentOutput> content, string format)
         {
             if (!FormatIsAvailable(format))
             {

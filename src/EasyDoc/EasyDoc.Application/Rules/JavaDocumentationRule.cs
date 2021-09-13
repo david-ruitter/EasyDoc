@@ -5,16 +5,17 @@ namespace EasyDoc.Application.Rules
 {
     public class JavaDocumentationRule : DocumentationRule
     {
-        public JavaDocumentationRule()
-        {
-            FileExtension = ".java";
-            StartOfComment = "/**";
-            EndOfComment = "*/";
-            CommentTags = new List<string>() 
+        public JavaDocumentationRule() : base(
+            ".java",
+            "/**",
+            "*/",
+            new List<string>()
             {
-                "@param", 
-                "@returns" 
-            };
+                "@param",
+                "@returns"
+            }
+            )
+        {
         }
 
         public override bool IsEndOfComment(char[] chars, int index)

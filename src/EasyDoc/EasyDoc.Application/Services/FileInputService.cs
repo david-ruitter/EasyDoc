@@ -1,5 +1,4 @@
-﻿#nullable enable
-using EasyDoc.Application.Interfaces;
+﻿using EasyDoc.Application.Interfaces;
 using EasyDoc.Application.Models;
 using System;
 using System.Collections.Generic;

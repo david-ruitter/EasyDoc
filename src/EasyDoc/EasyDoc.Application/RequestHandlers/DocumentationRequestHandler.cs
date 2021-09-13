@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace EasyDoc.Application.RequestHandlers
 {
     public class DocumentationRequestHandler :
-        IRequestHandler<GetJavaDocumentation, CommentOutput>
+        IRequestHandler<GetJavaDocumentation, CommentOutput?>
     {
-        public async Task<CommentOutput> Handle(GetJavaDocumentation request, CancellationToken cancellationToken)
+        public async Task<CommentOutput?> Handle(GetJavaDocumentation request, CancellationToken cancellationToken)
         {
             if (!request.IsValid())
             {

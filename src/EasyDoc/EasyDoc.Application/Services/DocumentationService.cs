@@ -13,7 +13,7 @@ namespace EasyDoc.Application.Services
     public class DocumentationService : IDocumentationService
     {
         private readonly IMediatorHandler _bus;
-        private DocumentationRule selectedRule;
+        private DocumentationRule? selectedRule;
         private readonly List<DocumentationRule> rules = new()
         {
             new JavaDocumentationRule()
@@ -24,7 +24,7 @@ namespace EasyDoc.Application.Services
             _bus = bus;
         }
 
-        public async Task<CommentOutput> CreateDocumentationAsync(InputFile inputFile)
+        public async Task<CommentOutput?> CreateDocumentationAsync(InputFile inputFile)
         {
             selectedRule = rules.FirstOrDefault(r => r.FileExtension == inputFile.Extension);
             if (selectedRule == null)
@@ -33,7 +33,7 @@ namespace EasyDoc.Application.Services
                 return null;
             }
 
-            CommentOutput documentation = null;
+            CommentOutput? documentation = null;
 
             if (inputFile.Extension == ".java")
             {

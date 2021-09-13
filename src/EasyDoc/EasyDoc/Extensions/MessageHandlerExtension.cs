@@ -18,7 +18,7 @@ namespace EasyDoc.Extensions
 
         public static IServiceCollection AddRequestHandlers(this IServiceCollection services)
         {
-            services.AddScoped<IRequestHandler<GetJavaDocumentation, CommentOutput>, DocumentationRequestHandler>();
+            services.AddScoped<IRequestHandler<GetJavaDocumentation, CommentOutput?>, DocumentationRequestHandler>();
             return services;
         }
     }

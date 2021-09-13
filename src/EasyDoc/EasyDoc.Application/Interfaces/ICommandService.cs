@@ -4,7 +4,7 @@ namespace EasyDoc.Application.Interfaces
 {
     public interface ICommandService
     {
-        Dictionary<string, List<string>> ConvertInputToCommandsAndParams(string[] args);
+        Dictionary<string, List<string>>? ConvertInputToCommandsAndParams(string[] args);
         bool IsValidCommand(string command);
         bool CommandTakesOneParam(string command);
         bool CommandTakesNoParam(string command);

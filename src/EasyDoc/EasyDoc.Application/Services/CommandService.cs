@@ -7,7 +7,7 @@ namespace EasyDoc.Application.Services
 {
     public class CommandService : ICommandService
     {
-        public Dictionary<string, List<string>> ConvertInputToCommandsAndParams(string[] args)
+        public Dictionary<string, List<string>>? ConvertInputToCommandsAndParams(string[] args)
         {
             var commandsAndParams = new Dictionary<string, List<string>>();
 
