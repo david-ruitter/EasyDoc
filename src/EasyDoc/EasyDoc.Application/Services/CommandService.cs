@@ -77,7 +77,8 @@ namespace EasyDoc.Application.Services
                 "-p", "--path",
                 "-o", "--output",
                 "-f", "--format",
-                "-i", "--input" 
+                "-i", "--input",
+                "-e", "--exclude",
             };
             return commands.Contains(command);
         }
@@ -88,7 +89,8 @@ namespace EasyDoc.Application.Services
             {
                 "-p", "--path",
                 "-o", "--output",
-                "-f", "--format"
+                "-f", "--format",
+                "-e", "--exclude",
             };
             return commands.Contains(command);
         }
