@@ -5,7 +5,20 @@ namespace EasyDoc.Application.Models
 {
     public class ProgressBar
     {
-        public int CurrentStep { get; set; }
+        private int currentStep;
+        public int CurrentStep
+        {
+            get
+            {
+                return currentStep;
+            }
+            set
+            {
+                if (value > Length)
+                    throw new ArgumentException("CurrentStep exceeds the total Length");
+                currentStep = value;
+            }
+        }
         public int Length { get; set; }
 
         public ProgressBar(int length)
@@ -21,6 +34,18 @@ namespace EasyDoc.Application.Models
 
         public void ShowProgress()
         {
+            Console.Write("[{0}]", GetProgress());
+            if(CurrentStep != Length)
+            {
+                Console.SetCursorPosition(0, Console.CursorTop);
+            } else
+            {
+                Console.WriteLine();
+            }
+        }
+
+        public string GetProgress()
+        {
             var placeHolder = new StringBuilder();
             for (int i = 0; i < Length; i++)
             {
@@ -33,15 +58,7 @@ namespace EasyDoc.Application.Models
                     placeHolder.Append(' ');
                 }
             }
-
-            Console.Write("[{0}]", placeHolder.ToString());
-            if(CurrentStep != Length)
-            {
-                Console.SetCursorPosition(0, Console.CursorTop);
-            } else
-            {
-                Console.WriteLine();
-            }
+            return placeHolder.ToString();
         }
 
         public bool Update()
