@@ -29,7 +29,7 @@ namespace EasyDoc.Application.Services
                     } 
                     else
                     {
-                        Console.WriteLine(args[i] + " is no know command");
+                        Console.WriteLine($"{args[i]} is no know command");
                         return null;
                     }
                 }
@@ -44,14 +44,14 @@ namespace EasyDoc.Application.Services
 
                     if (CommandTakesNoParam(currentCommand))
                     {
-                        Console.WriteLine(currentCommand + " takes no arguments.");
+                        Console.WriteLine($"{currentCommand} takes no arguments.");
                         return null;
                     }
 
                     paramsList.Add(args[i]);
                     if (CommandTakesOneParam(currentCommand) && paramsList.Count > 1)
                     {
-                        Console.WriteLine(currentCommand + " only takes one argument.");
+                        Console.WriteLine($"{currentCommand} only takes one argument.");
                         return null;
                     }
                     var checkList = paramsList.ToList();
@@ -70,7 +70,7 @@ namespace EasyDoc.Application.Services
 
         public bool IsValidCommand(string command)
         {
-            string[] commands = new string[] 
+            string[] commands = new string[]
             { 
                 "-v", "--version",
                 "-h", "--help",
