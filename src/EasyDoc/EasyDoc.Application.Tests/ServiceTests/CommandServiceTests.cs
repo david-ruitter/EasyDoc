@@ -1,6 +1,9 @@
 ﻿using EasyDoc.Application.Services;
 using FluentAssertions;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using Xunit;
 
 namespace EasyDoc.Application.Tests.ServiceTests
@@ -60,10 +63,104 @@ namespace EasyDoc.Application.Tests.ServiceTests
             {
                 new string[]
                 {
-                "-v", "--version",
-                "-h", "--help",
+                    "-v", "--version",
+                    "-h", "--help",
                 }
             }
+        };
+
+        public static readonly IEnumerable<object[]> ConvertInputTestData = new List<object[]>()
+        {
+            // version command
+            new object[]
+            {
+                new string[]
+                {
+                    "-v"
+                },
+                new Dictionary<string, List<string>>()
+                {
+                    { "-v", new List<string>() }
+                }
+            },
+            // help command
+            new object[]
+            {
+                new string[]
+                {
+                    "-h"
+                },
+                new Dictionary<string, List<string>>()
+                {
+                    { "-h", new List<string>() }
+                }
+            }
+        };
+
+        public static readonly IEnumerable<object[]> NotConvertInputTestData = new List<object[]>()
+        {
+            // No known Command TestCase
+            new object[]
+            {
+                new string[]
+                {
+                    "--v"
+                },
+                new string[]
+                {
+                    "--v is no know command"
+                }
+            },
+            // Command takes no arguments Test Case
+            new object[]
+            {
+                new string[]
+                {
+                    "-v", "abcde"
+                },
+                new string[]
+                {
+                    "-v takes no arguments."
+                }
+            },
+            new object[]
+            {
+                new string[]
+                {
+                    "-h", Path.Combine("C:", "dev", "doc"),
+                },
+                new string[]
+                {
+                    "-h takes no arguments."
+                },
+            },
+            // Argument List which starts with an element without "-" prefix
+            new object[]
+            {
+                new string[]
+                {
+                    "v"
+                },
+                new string[]
+                {
+                    "Please provide a correct argument.",
+                    "use --help or -h for more information."
+                },
+            },
+            // Command that takes only one argument
+            new object[]
+            {
+                new string[]
+                {
+                    "-o",
+                    Path.Combine("C:", "dev", "doc"),
+                    Path.Combine("C:", "dev", "doc2"),
+                },
+                new string[]
+                {
+                    "-o only takes one argument."
+                },
+            },
         };
 
         public CommandServiceTests()
@@ -105,6 +202,33 @@ namespace EasyDoc.Application.Tests.ServiceTests
             {
                 _commandService.CommandTakesNoParam(command).Should().BeTrue();
             }
+        }
+
+        [Theory, MemberData(nameof(ConvertInputTestData))]
+        public void Should_Convert_Input_To_Commands_And_Params(string[] input, Dictionary<string, List<string>> result)
+        {
+            _commandService.ConvertInputToCommandsAndParams(input).Should().BeEquivalentTo(result);
+        }
+
+        [Theory, MemberData(nameof(NotConvertInputTestData))]
+        public void Should_Not_Convert_Input_To_Commands_And_Params(string[] input, string[] errorMessages)
+        {
+            var actualBuilder = new StringBuilder();
+            var actualStringWriter = new StringWriter(actualBuilder);
+            Console.SetOut(actualStringWriter);
+            _commandService.ConvertInputToCommandsAndParams(input).Should().BeNull();
+            string actual = actualBuilder.ToString();
+
+            var expectedBuilder = new StringBuilder();
+            var expectedStringWriter = new StringWriter(expectedBuilder);
+            Console.SetOut(expectedStringWriter);
+            foreach(var errorMessage in errorMessages)
+            {
+                Console.WriteLine(errorMessage);
+            }
+            string expected = expectedBuilder.ToString();
+
+            expected.Should().Be(actual);
         }
     }
 }
