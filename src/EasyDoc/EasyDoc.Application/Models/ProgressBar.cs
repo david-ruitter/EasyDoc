@@ -5,6 +5,8 @@ namespace EasyDoc.Application.Models
 {
     public class ProgressBar
     {
+        public string ProgressIndicator { get; set; } = "#";
+
         private int currentStep;
         public int CurrentStep
         {
@@ -32,6 +34,13 @@ namespace EasyDoc.Application.Models
             CurrentStep = currentStep;
         }
 
+        public ProgressBar(int length, int currentStep, string progressIndicator)
+        {
+            Length = length;
+            CurrentStep = currentStep;
+            ProgressIndicator = progressIndicator;
+        }
+
         public void ShowProgress()
         {
             Console.Write("[{0}]", GetProgress());
@@ -51,7 +60,7 @@ namespace EasyDoc.Application.Models
             {
                 if (i < CurrentStep)
                 {
-                    placeHolder.Append('#');
+                    placeHolder.Append(ProgressIndicator);
                 }
                 else
                 {
