@@ -44,7 +44,6 @@ namespace EasyDoc.Application.Services
 
         public List<InputFile> ReadFiles(List<string[]> folders)
         {
-            Console.WriteLine("Reading Files");
             var output = new List<InputFile>();
             var progressBar = new ProgressBar(folders.Count);
             foreach (var folder in folders)
