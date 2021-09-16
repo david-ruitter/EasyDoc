@@ -11,7 +11,7 @@ namespace EasyDoc.Application.Services
         public Dictionary<string, List<string>>? ConvertInteractive()
         {
             // First command is the question
-            var commands = new string[] { "Which command do you want to choose", "Input", "Output", "Help", "Version", "Exit" };
+            var commands = new string[] { "Which command do you want to choose", "Run", "Input", "Output", "Help", "Version", "Exit" };
             string? command = GetCommand(commands);
             if (command == null)
             {
@@ -19,6 +19,10 @@ namespace EasyDoc.Application.Services
             }
             switch(command.ToLower())
             {
+                case "run":
+                    {
+                        return CommandsAndParams;
+                    }
                 case "version":
                     {
                         return new Dictionary<string, List<string>>() { 
@@ -46,7 +50,7 @@ namespace EasyDoc.Application.Services
                         {
                             return null;
                         }
-                        CommandsAndParams.Add("-i", new List<string>() { outputPath });
+                        CommandsAndParams.Add("-o", new List<string>() { outputPath });
                         return ConvertInteractive();
                     }
             }
